@@ -1,0 +1,194 @@
+{% extends 'template/public_template.html' %}
+{% block title %} Pagina Principal {% endblock %}
+{% block main %}
+
+
+<div class="container shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-center">'Clima e Tempo atual'</h2>
+            <hr>
+
+            <form method="post">
+                <div class="mb-3">
+                    {{form.hidden_tag()}}
+                    {{form.place.label(class='form-label')}}
+                    {{form.place(class='form-control mx-0 my-2')}}
+                    {{form.units.label(class='form-label')}}
+                    {{form.units(class='form-control mx-0 my-2')}}
+                </div>
+
+                {{form.button(class='btn btn-primary')}}
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% if data %}
+
+
+<div class="container shadow-lg p-3 mt-3 bg-info-subtle bg-gradient rounded">
+    <div class="row">
+
+        <div class="col-xs-1 col-md-6">
+
+            <div class="card text-white" id="weatherCard">
+                <div class="card-body">
+                    <!-- Parte principal do card -->
+                    <div class="row d-flex align-items-center">
+                        <i class="col-2 p-0 m-0">
+                            <img id="icon" src="{{'http://openweathermap.org/img/w/' +  data['icon'] + '.png'}}" alt="">
+                        </i>
+                        <p class="card-text text-start fs-6 fw-semibold col-4 p-0 m-0">{{data['Descricao']}}</p>
+                        <p class="card-title text-end fs-4 fw-bold col-6 p-0 m-0">{{data['Localidade']}} -
+                            {{data['Pais']}}</p>
+                    </div>
+
+
+                    <p class="card-text text-end fs-6 fw-light">{{data['Temperatura Atual']}}</p>
+                    <p class="card-text fs-6 fw-light">{{data['Dia nome']}}</p>
+                    <div class="row">
+                        <p class="card-text fs-6 fw-light text-right">{{data['Data e hora local']}}</p>
+                    </div>
+                    <!-- Termina aqui -->
+                    <!-- parte acordion -->
+
+                    <div class="accordion mt-3" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    {{'Temperatura e Pressão'}}
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    {% for key,value in data.items() %}
+
+                                    {% if key in ['Temperatura atual','Temperatura maxima','Temperatura
+                                    minima','Sensacao termica','Pressao atmosferica','Pressao atmosferica nos
+                                    oceanos','Pressao atmosferica na terra'] %}
+                                    <p class="">
+                                        {{key}}: {{value}}
+                                    </p>
+                                    {% endif %}
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    {{'Vento e Chuva'}}
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    {% for key,value in data.items() %}
+
+                                    {% if key in ['Velocidade dos ventos','Direcao dos ventos','Rajada de
+                                    vento','Visibilidade','Nuvens'] %}
+                                    <p class="">
+                                        {{key}}: {{value}}
+                                    </p>
+                                    {% endif %}
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    {{'Informações adicionais'}}
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    {% for key,value in data.items() %}
+
+                                    {% if key in ['Nascer do sol','Por do Sol','Volume de chuva nas ultimas 1h','Volume
+                                    de chuva nas ultimas 3h','Volume de neve nas ultimas 1h','Volume de chuva nas
+                                    ultimas 3h'] %}
+
+
+                                    {% if value %}
+
+                                    <p class="">
+                                        {{key}}: {{value}}
+                                    </p>
+
+                                    {% endif %}
+
+                                    {% endif %}
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- termina aqui -->
+                </div>
+            </div>
+        </div>
+        <div class="col">
+           
+            <iframe class="m-0 p-0" width="300" height="170" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+            src="{{ 'https://maps.google.com/maps?q='   ~data['latitude'] ~ ',' ~  data['longitude'] ~'&hl=pt-br&z=14&made&output=embed' }}">
+            </iframe>
+
+        </div>
+    </div>
+
+</div>
+
+
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script>
+
+    !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
+
+    function setSize(){
+
+        
+
+        card = document.querySelector('#weatherCard')
+
+        maps = document.querySelector('iframe')
+
+        maps.setAttribute('height', card.offsetHeight)
+        maps.setAttribute('width', card.offsetWidth)
+        
+        
+   
+    }
+    
+    window.onload = () =>{
+        document.getElementById('nav-item1').setAttribute('class','nav-link active')
+        setSize()
+
+    }
+
+    
+
+</script>
+{% endblock %}

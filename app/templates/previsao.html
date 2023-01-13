@@ -1,0 +1,89 @@
+{% extends 'template/public_template.html' %}
+{% block title %} Pagina Principal {% endblock %}
+{% block main %}
+
+<div class="container shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-center" id="t">Previsão do tempo</h2>
+            <hr>
+
+            <form method="post">
+                <div class="mb-3">
+                    {{form.hidden_tag()}}
+                    {{form.place.label(class='form-label')}}
+                    {{form.place(class='form-control mx-0 my-2')}}
+                    {{form.units.label(class='form-label')}}
+                    {{form.units(class='form-control mx-0 my-2')}}
+                </div>
+
+                {{form.button(class='btn btn-primary')}}
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% if data %}
+
+<div class="container shadow-lg p-3 mt-3 bg-info-subtle bg-gradient rounded">
+    <div class="row d-flex justify-content-around">
+
+        {{data[2]}}
+    {% for row in data %}
+
+        
+
+
+        <div class="col-xs-6 col-md-4  my-2 ">
+
+            <div class="card text-white" id="weatherCard">
+                <div class="card-body">
+                    <!-- Parte principal do card -->
+                    <div class="row d-flex align-items-center justify-content-between">
+                        <i class="col-2  p-0 m-0">
+                            <img id="icon" src="{{'http://openweathermap.org/img/w/' +  row['icon'] + '.png'}}" alt="">
+                        </i>
+                        <p class="card-text text-start fs-6 fw-semibold col-4 p-0 m-0">{{row['Descricao']}}</p>
+                    </div>
+
+
+                    <p class="card-text text-end fs-6 fw-light">{{'Temperatura media'}} {{row['Temperatura atual']}}</p>
+                    <p class="card-text fs-6 fw-light">{{row['Dia nome previsao']}}</p>
+                    <div class="row">
+                        <p class="card-text fs-6 fw-light text-right">{{row['Data e hora previsao']}}</p>
+                    </div>  
+                    <div class="row">
+                        <p class="card-text fs-10 fw-light text-right">Temperatura Min: {{row['Temperatura minima']}}</p>
+                        <p class="card-text fs-10 fw-light text-right">Temperatura Max: {{row['Temperatura maxima']}}</p>
+                    </div>  
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+        
+        
+        
+    {% endfor %}
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+{% block script %}
+<script>
+
+    document.getElementById('nav-item2').setAttribute('class','nav-link active')
+
+</script>
+
+{% endblock %}
