@@ -72,25 +72,43 @@ class CurrentWeather:
 
 
         for key in res.keys():
-
+            #python 3.9
+            # if key not in ['rain','snow']:
+            #     if isinstance(res[key],list):
+            #         myList = myList | res[key][0] 
+            #     elif isinstance(res[key],dict):
+            #         myList =  myList | res[key]
+            #     else:  
+            #         myList[key] = res[key]
+            
+            #python 3.7
             if key not in ['rain','snow']:
                 if isinstance(res[key],list):
-                    myList = myList | res[key][0] 
+                    myList = {**myList, **res[key][0]}
                 elif isinstance(res[key],dict):
-                    myList =  myList | res[key]
+                    myList = {**myList,**res[key]}
                 else:  
                     myList[key] = res[key]
+
+
 
 
         rain = condition('rain')
         snow = condition('snow')
 
+        #python 3.9
+        # if bool(rain):
+        #     myList = myList | rain
 
+        # if bool(snow):
+        #     myList = myList | snow
+
+        #python 3.7
         if bool(rain):
-            myList = myList | rain
+            myList = {**myList,**rain}
 
         if bool(snow):
-            myList = myList | snow
+            myList = {**myList,**snow}
 
         return myList
 
