@@ -162,9 +162,11 @@ class CurrentWeather:
         return self.all
 
     def start(self):
-        
-        self.getweather()
-        return self.niceDict(data=self.all)
+        try:
+            self.getweather()
+            return self.niceDict(data=self.all),'Sucesso'
+        except Exception as e: 
+            return None,e
 
 
 class forecastWeather(CurrentWeather):

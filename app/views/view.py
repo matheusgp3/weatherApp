@@ -23,11 +23,11 @@ def main():
     
     if request.method == "POST":
         
-        try:
-            data = CurrentWeather(place = form.data['place'],lang= 'pt-br',units=form.data['units']).start()
+        data,mensagem = CurrentWeather(place = form.data['place'],lang= 'pt-br',units=form.data['units']).start()
+        if data is not None:
             return render_template('index.html',form = form,data=data)
-        except:
-            flash("Não encontrado o endereço informado",category="warning")
+
+        flash(f"Não encontrado o endereço informado,{mensagem}",category="warning")
       
         
     return render_template('index.html',form = form)
