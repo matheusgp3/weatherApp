@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template,request
+from flask import render_template,request,flash
 from app.models.forms import WeatherForm
 from app.models.weather import CurrentWeather, forecastWeather
 from googletrans import Translator
@@ -20,24 +20,27 @@ def translate(text,dest):
 @app.route('/',methods = ["GET","POST"])
 def main():
     form = WeatherForm()
-    data = None
     
     if request.method == "POST":
- 
-        data = CurrentWeather(place = form.data['place'],lang= 'pt-br',units=form.data['units']).start()
+        
+        try:
+            data = CurrentWeather(place = form.data['place'],lang= 'pt-br',units=form.data['units']).start()
+            return render_template('index.html',form = form,data=data)
+        except:
+            flash("Não encontrado o endereço informado",category="warning")
       
         
-
-    return render_template('index.html',form = form,data=data)
+    return render_template('index.html',form = form)
 
 @app.route('/previsao',methods=['GET',"POST"])
 def test():
     form = WeatherForm()
-    data = None
 
     if request.method == "POST":
+        try:
+            data = forecastWeather(place = form.data['place'],lang= 'pt-br',units=form.data['units']).forecastDay()
+            return render_template('previsao.html',form=form,data=data)
+        except:
+            flash("Não encontrado o endereço informado",category="warning")
 
-        data = forecastWeather(place = form.data['place'],lang= 'pt-br',units=form.data['units']).startForecast()
-        print(data[0])
-
-    return render_template('previsao.html',form=form,data=data)
+    return render_template('previsao.html',form=form)

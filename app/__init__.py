@@ -18,5 +18,5 @@ db = SQLAlchemy(app)
 
 
 from app.views import view
-from app.models.tables import WeatherData
+#from app.models.tables import WeatherData
 

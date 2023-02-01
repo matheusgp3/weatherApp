@@ -201,6 +201,18 @@ class forecastWeather(CurrentWeather):
             bDict.append(self.niceDict(data=element))
 
         return bDict
+    
+
+    def forecastDay(self):
+        self.getForcast()
+        dt = self.niceDictList()
+        dt_final = []
+        for element in dt:
+            if element['Data e hora previsao'].endswith('06:00:00'):
+                dt_final.append(element)
+
+        
+        return dt_final
 
     def startForecast(self):
         
